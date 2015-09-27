@@ -1,5 +1,38 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<head>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Vollkorn">
+  </head>
+    <style>
+  		/* Custom container */
+		.container-full {
+		  margin: 0 auto;
+		  width: 100%;
+		  min-height:100%;
+		  background-color:#110022;
+		  color:#eee;
+		  overflow:hidden;
+		}
+		p {
+		  font-family: 'Antic Slab', serif;
+		  font-size:30px;
+		  color:#DDCCEE;
+		}
+		.container-full a {
+		  color:#efefef;
+		  text-decoration:none;
+		}
 {{define "list"}}
+</style>
 <html>
+<div class="container-full">
     <head>
         <title>Would you rather</title>
     </head>
@@ -15,5 +48,6 @@
 
         <a href="/submit">Submit a new question</a>
     </body>
+	</div>
 </html>
 {{end}}
