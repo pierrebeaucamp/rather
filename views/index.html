@@ -22,14 +22,14 @@
 </div>
 
 <div class="container">
-  <form role="form">
+  <form role="form" action="/save" method="POST" enctype="multipart/form-data">
     <div class="form-group">
       <label for="ChoiceA">Choice A:</label>
-      <input type="text" class="form-control" id="A">
+      <input type="text" class="form-control" id="A" name="OptionA">
     </div>
     <div class="form-group">
       <label for="ChoiceB">Choice B:</label>
-      <input type="password" class="form-control" id="B">
+      <input type="text" class="form-control" id="B" name="OptionB">
     </div>
 	<center><button type="submit" class="btn btn-default">Submit</button></center>
   </form>
