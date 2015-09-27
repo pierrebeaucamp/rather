@@ -11,10 +11,10 @@ import (
 )
 
 type Dare struct {
-	optionA string
-	optionB string
-	amountA int
-	amountB int
+	OptionA string
+	OptionB string
+	AmountA int
+	AmountB int
 }
 
 /*
@@ -67,10 +67,10 @@ func get(w http.ResponseWriter, r *http.Request) {
 func save(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	d := Dare{
-		optionA: r.FormValue("OptionA"),
-		optionB: r.FormValue("OptionB"),
-		amountA: 0,
-		amountB: 0,
+		OptionA: r.FormValue("OptionA"),
+		OptionB: r.FormValue("OptionB"),
+		AmountA: 0,
+		AmountB: 0,
 	}
 
 	key := datastore.NewIncompleteKey(c, "Dare", parentProject(c))
