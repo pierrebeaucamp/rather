@@ -11,28 +11,100 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+  
+	@import url(http://fonts.googleapis.com/css?family=Antic+Slab);
 
+		html,body {
+		  height:100%;
+		}
+
+		h1 {
+		  font-family: 'Antic Slab', serif;
+		  font-size:80px;
+		  color:#DDCCEE;
+		}
+
+		h2 {
+		  font-family: 'Antic Slab', serif;
+		  font-size:50px;
+		  color:#DDCCEE;
+		}
+
+		.lead {
+			color:#DDCCEE;
+		}
+
+
+		/* Custom container */
+		.container-full {
+		  margin: 0 auto;
+		  width: 100%;
+		  min-height:100%;
+		  background-color:#110022;
+		  color:#eee;
+		  overflow:hidden;
+		}
+
+		.container-full a {
+		  color:#efefef;
+		  text-decoration:none;
+		}
+
+		.v-center {
+		  margin-top:7%;
+		}
+		.text {
+			padding-left: 20px;
+			padding-right: 20px;
+			width: 70%;
+			height: 60px;
+			font-size: 25px;
+			color: black;
+		}
+		
+		.btn {
+		  -webkit-border-radius: 0;
+		  -moz-border-radius: 0;
+		  border-radius: 0px;
+		  font-family: Arial;
+		  color: #ffffff;
+		  font-size: 31px;
+		  background: #1482cc;
+		  padding: 10px 20px 10px 20px;
+		  border: solid #1f628d 2px;
+		  text-decoration: none;
+		}
+
+		.btn:hover {
+		  background: #3cb0fd;
+		  text-decoration: none;
+		}
+	  </style>
 </head>
 <body>
-<div class="jumbotron">
-  <center><h1>Would You Rather?</h1></center>
-  <!--
-  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-  -->
-</div>
 
-<div class="container">
-  <form role="form" action="/save" method="POST" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="ChoiceA">Choice A:</label>
-      <input type="text" class="form-control" id="A" name="OptionA">
-    </div>
-    <div class="form-group">
-      <label for="ChoiceB">Choice B:</label>
-      <input type="text" class="form-control" id="B" name="OptionB">
-    </div>
-	<center><button type="submit" class="btn btn-default">Submit</button></center>
-  </form>
+<div class="container-full">
+  <div class="row">
+       
+        <div class="col-lg-12 text-center v-center">
+          
+          <h1>Ask Us A Question</h1>
+          
+          <br>
+          
+          <form class="col-lg-12">
+            <div class="input-group input-group-lg col-sm-offset-4 col-sm-4">
+             <h2>Would you rather...</h2><br>
+              <input type="text" class="text" title="Option A" name="OptionA" placeholder="Option A"><h2>OR</h2>
+              <input type="text" class="text" title="Option B" name="OptionB" placeholder="Option B">
+			  <br><br><br>
+			  <button type="submit" class="btn" value="Submit">Submit</button>
+            </div>
+          </form>
+        </div>
+        
+      </div>
 </div>
 </body>
 </html>
