@@ -1,0 +1,15 @@
+{{define "question"}}
+<html>
+    <head>
+        <title>Would you rather</title>
+    </head>
+    <body>
+        <p>Would you rather...</p>
+        <p count="{{.AmountA}}">{{.OptionA}}</p>
+        <p>or</p>
+        <p count="{{.AmountB}}">{{.OptionB}}</p>
+
+        <a href="/">Home</a>
+    </body>
+</html>
+{{end}}

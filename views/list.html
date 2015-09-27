@@ -1,0 +1,19 @@
+{{define "list"}}
+<html>
+    <head>
+        <title>Would you rather</title>
+    </head>
+    <body>
+        {{range .}}
+            <p>Would you rather...</p>
+            <p count="{{.AmountA}}">{{.OptionA}}</p>
+            <p>or</p>
+            <p count="{{.AmountB}}">{{.OptionB}}</p>
+            <a href="{{.Permalink}}">Link</a>
+            <hr>
+        {{end}}
+
+        <a href="/submit">Submit a new question</a>
+    </body>
+</html>
+{{end}}
