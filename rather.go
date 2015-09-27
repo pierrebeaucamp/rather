@@ -62,7 +62,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	d.AmountA += addA
 	d.AmountB += addB
 
-	_, err = datastore.Put(c, key, &d)
+	_, err = datastore.Put(c, key, d)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
