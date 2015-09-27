@@ -1,4 +1,6 @@
 {{define "list"}}
+<html>
+<head>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -8,9 +10,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<head>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Vollkorn">
-  </head>
     <style>
   		/* Custom container */
 		.container-full {
@@ -32,13 +32,12 @@
 		  color:#efefef;
 		  text-decoration:none;
 		}
-</style>
-<html>
-<div class="container-full">
-    <head>
+
         <title>Would you rather</title>
-    </head>
+</style>
+</head>
     <body>
+<div class="container-full">
         {{range .}}
             <p>Would you rather...</p>
             <p count="{{.AmountA}}">{{.OptionA}}</p>
