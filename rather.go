@@ -8,13 +8,16 @@ import (
 	"html/template"
 	"math/rand"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type Dare struct {
-	OptionA string
-	OptionB string
-	AmountA int
-	AmountB int
+	OptionA   string
+	OptionB   string
+	AmountA   int
+	AmountB   int
+	Permalink string
 }
 
 func init() {
@@ -22,6 +25,7 @@ func init() {
 	http.HandleFunc("/get", random)
 	http.HandleFunc("/save", save)
 	http.HandleFunc("/submit", submit)
+	http.HandleFunc("/question/", question)
 }
 
 func get(w http.ResponseWriter, r *http.Request) ([]Dare, error) {
@@ -72,26 +76,59 @@ func random(w http.ResponseWriter, r *http.Request) {
 
 func save(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
-	d := Dare{
-		OptionA: r.FormValue("OptionA"),
-		OptionB: r.FormValue("OptionB"),
-		AmountA: 0,
-		AmountB: 0,
-	}
-
-	key := datastore.NewIncompleteKey(c, "Dare", parentProject(c))
-	_, err := datastore.Put(c, key, &d)
+	id, _, err := datastore.AllocateIDs(c, "Dare", parentProject(c), 1)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusFound)
+	key := datastore.NewKey(c, "Dare", "", id, parentProject(c))
+	url := fmt.Sprintf("/question/%d", id)
+
+	d := Dare{
+		OptionA:   r.FormValue("OptionA"),
+		OptionB:   r.FormValue("OptionB"),
+		AmountA:   0,
+		AmountB:   0,
+		Permalink: url,
+	}
+
+	_, err = datastore.Put(c, key, &d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
 func submit(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.New("submit").ParseFiles("views/submit.html"))
 	err := t.ExecuteTemplate(w, "submit", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func question(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	d := new(Dare)
+
+	id, err := strconv.ParseInt(strings.Split(r.URL.Path, "/")[2], 10, 0)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	key := datastore.NewKey(c, "Dare", "", id, parentProject(c))
+	err = datastore.Get(c, key, d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	t := template.Must(template.New("question").ParseFiles("views/question.html"))
+	err = t.ExecuteTemplate(w, "question", d)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
