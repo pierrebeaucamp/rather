@@ -34,14 +34,14 @@ func get(w http.ResponseWriter, r *http.Request) ([]Dare, error) {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	_, err := get(w, r)
+	dares, err := get(w, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	t := template.Must(template.New("submit").ParseFiles("views/submit.html"))
-	err = t.ExecuteTemplate(w, "submit", nil)
+	t := template.Must(template.New("list").ParseFiles("views/list.html"))
+	err = t.ExecuteTemplate(w, "list", dares)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
