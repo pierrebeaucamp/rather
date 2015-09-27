@@ -13,16 +13,17 @@ import (
 )
 
 type Dare struct {
-	OptionA   string
-	OptionB   string
-	AmountA   int
-	AmountB   int
-	Permalink string
+	OptionA string
+	OptionB string
+	AmountA int
+	AmountB int
+	Id      int
 }
 
 func init() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/get", random)
+	http.HandleFunc("/post", handle)
 	http.HandleFunc("/save", save)
 	http.HandleFunc("/submit", submit)
 	http.HandleFunc("/question/", question)
@@ -35,6 +36,37 @@ func get(w http.ResponseWriter, r *http.Request) ([]Dare, error) {
 	var dares []Dare
 	_, err := q.GetAll(c, &dares)
 	return dares, err
+}
+
+func handle(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+	d := new(Dare)
+	decoder := json.NewDecoder(r.Body)
+
+	err := decoder.Decode(&d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	addA := d.AmountA
+	addB := d.AmountB
+
+	key := datastore.NewKey(c, "Dare", "", int64(d.Id), parentProject(c))
+	err = datastore.Get(c, key, d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	d.AmountA += addA
+	d.AmountB += addB
+
+	_, err = datastore.Put(c, key, &d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -83,14 +115,13 @@ func save(w http.ResponseWriter, r *http.Request) {
 	}
 
 	key := datastore.NewKey(c, "Dare", "", id, parentProject(c))
-	url := fmt.Sprintf("/question/%d", id)
 
 	d := Dare{
-		OptionA:   r.FormValue("OptionA"),
-		OptionB:   r.FormValue("OptionB"),
-		AmountA:   0,
-		AmountB:   0,
-		Permalink: url,
+		OptionA: r.FormValue("OptionA"),
+		OptionB: r.FormValue("OptionB"),
+		AmountA: 0,
+		AmountB: 0,
+		Id:      int(id),
 	}
 
 	_, err = datastore.Put(c, key, &d)
@@ -99,6 +130,7 @@ func save(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	url := fmt.Sprintf("/question/%d", id)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
