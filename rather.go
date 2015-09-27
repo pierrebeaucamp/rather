@@ -17,38 +17,43 @@ type Dare struct {
 	AmountB int
 }
 
-/*
-type User struct {
-	phone string
-}
-
-type Choice struct {
-	user   User
-	dare   Dare
-	choseA bool
-}
-*/
-
 func init() {
 	http.HandleFunc("/", index)
-	http.HandleFunc("/get", get)
+	http.HandleFunc("/get", random)
 	http.HandleFunc("/save", save)
+	http.HandleFunc("/submit", submit)
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.New("index").ParseFiles("views/index.html"))
-	err := t.ExecuteTemplate(w, "index", nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func get(w http.ResponseWriter, r *http.Request) {
+func get(w http.ResponseWriter, r *http.Request) ([]Dare, error) {
 	c := appengine.NewContext(r)
 	q := datastore.NewQuery("Dare").Ancestor(parentProject(c))
 
 	var dares []Dare
 	_, err := q.GetAll(c, &dares)
+	return dares, err
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	_, err := get(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	t := template.Must(template.New("submit").ParseFiles("views/submit.html"))
+	err = t.ExecuteTemplate(w, "submit", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+// Each project gets assigend the same ancestor so we have faster reads
+func parentProject(c appengine.Context) *datastore.Key {
+	return datastore.NewKey(c, "Project", "parent-project", 0, nil)
+}
+
+func random(w http.ResponseWriter, r *http.Request) {
+	dares, err := get(w, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -61,6 +66,7 @@ func get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	fmt.Fprint(w, string(j))
 }
 
@@ -83,7 +89,10 @@ func save(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
-// Each project gets assigend the same ancestor so we have faster reads
-func parentProject(c appengine.Context) *datastore.Key {
-	return datastore.NewKey(c, "Project", "parent-project", 0, nil)
+func submit(w http.ResponseWriter, r *http.Request) {
+	t := template.Must(template.New("submit").ParseFiles("views/submit.html"))
+	err := t.ExecuteTemplate(w, "submit", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
